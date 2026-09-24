@@ -42,3 +42,11 @@ export function importContentSnapshot(data) {
     headers: { repeatSubmit: false }
   })
 }
+
+export function getSiteSettings() {
+  return request({ url: '/crowlook/settings', method: 'get' })
+}
+
+export function updateSiteSettings(data) {
+  return request({ url: '/crowlook/settings', method: 'put', data })
+}

@@ -58,7 +58,8 @@ const overview = reactive({
   draftPosts: 0,
   categories: 0,
   publishedPages: 0,
-  pendingComments: 0
+  pendingComments: 0,
+  totalFavorites: 0
 })
 
 const metrics = computed(() => [
@@ -66,14 +67,16 @@ const metrics = computed(() => [
   { label: '待发布草稿', value: overview.draftPosts, note: '需要补充或确认', path: '/crowlook/post' },
   { label: '内容分类', value: overview.categories, note: '用于作品筛选与导航', path: '/crowlook/category' },
   { label: '已发布页面', value: overview.publishedPages, note: '首页、发现与品牌页', path: '/crowlook/page' },
-  { label: '待审核评论', value: overview.pendingComments, note: '通过后在详情页显示', path: '/crowlook/comment' }
+  { label: '待审核评论', value: overview.pendingComments, note: '通过后在详情页显示', path: '/crowlook/comment' },
+  { label: '累计点赞', value: overview.totalFavorites, note: '用户端真实互动统计', path: '/crowlook/post' }
 ])
 
 const workflow = [
   { title: '整理分类', description: '维护用户端栏目名称、层级与顺序。', path: '/crowlook/category' },
   { title: '编辑作品', description: '录入封面、正文与展示方式，并明确发布状态。', path: '/crowlook/post' },
   { title: '装修页面', description: '拖动调整首页、作品页和品牌页的内容模块。', path: '/crowlook/page' },
-  { title: '审核评论', description: '通过或拒绝用户评论，通过后立即展示在用户端。', path: '/crowlook/comment' }
+  { title: '审核评论', description: '通过或拒绝用户评论，通过后立即展示在用户端。', path: '/crowlook/comment' },
+  { title: '用户端设置', description: '维护首页文案、客服二维码、搜索词和门店地址。', path: '/crowlook/settings' }
 ]
 
 function go(path) {

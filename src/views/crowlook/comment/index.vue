@@ -61,6 +61,7 @@
         <div class="comment-body">
           <div class="comment-author">
             <strong>{{ row.nickname || '访客' }}</strong>
+            <span v-if="row.parentNickname" class="reply-target">回复 {{ row.parentNickname }}</span>
             <span>{{ friendlyTime(row.createTime) }}</span>
             <el-tag :type="statusMeta(row.status).type" effect="plain" size="small">{{ statusMeta(row.status).label }}</el-tag>
           </div>
@@ -218,6 +219,7 @@ refreshAll()
 .avatar { display: grid; width: 42px; height: 42px; place-items: center; color: #f7f5f0; background: #5d584f; border-radius: 50%; font-size: 14px; font-weight: 700; }
 .comment-body { min-width: 0; }
 .comment-author { display: flex; align-items: center; flex-wrap: wrap; gap: 9px; }
+.reply-target { padding: 2px 7px; color: #716b61; background: #efede7; border-radius: 4px; font-size: 11px; }
 .comment-author strong { font-size: 14px; }.comment-author > span { color: var(--muted); font-size: 12px; }
 .comment-body > p { max-width: 760px; margin: 12px 0; color: #33312d; font-size: 15px; line-height: 1.75; white-space: pre-wrap; word-break: break-word; }
 .post-link { display: inline-flex; max-width: 100%; align-items: center; gap: 6px; padding: 0; overflow: hidden; color: #777269; background: transparent; border: 0; cursor: pointer; font-size: 12px; }
