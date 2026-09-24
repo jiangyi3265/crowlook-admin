@@ -112,7 +112,7 @@ const showTip = computed(
 watch(() => props.modelValue, val => {
   if (val) {
     // 首先将值转为数组
-    const list = Array.isArray(val) ? val : props.modelValue.split(",")
+    const list = Array.isArray(val) ? val : splitImageValue(props.modelValue)
     // 然后将数组转为对象数组
     fileList.value = list.map(item => {
       if (typeof item === "string") {
@@ -129,6 +129,13 @@ watch(() => props.modelValue, val => {
     return []
   }
 },{ deep: true, immediate: true })
+
+// 旧站 OSS 图片地址的裁剪参数本身包含英文逗号，不能把这些逗号误判成多图分隔符。
+function splitImageValue(value) {
+  const text = String(value || '')
+  if (/^https?:\/\//i.test(text)) return text.split(/,(?=https?:\/\/)/i)
+  return text.split(',')
+}
 
 // 上传前loading加载
 function handleBeforeUpload(file) {
