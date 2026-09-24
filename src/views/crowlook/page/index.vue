@@ -158,15 +158,34 @@
                     <el-segmented v-model="mediaType" :options="mediaOptions" block @change="markDirty" />
                   </el-form-item>
                   <el-form-item :label="mediaType === 'video' ? '视频封面' : '图片'">
-                    <el-input v-model="selectedContent.image" placeholder="粘贴图片地址" @input="markDirty">
-                      <template #prefix><el-icon><Picture /></el-icon></template>
-                    </el-input>
-                    <el-image v-if="selectedContent.image" class="image-preview" :src="selectedContent.image" fit="cover" />
+                    <image-upload
+                      :model-value="selectedContent.image"
+                      :limit="1"
+                      :file-size="10"
+                      :file-type="['png', 'jpg', 'jpeg', 'webp', 'gif']"
+                      @update:model-value="value => updateSelectedContent('image', value)"
+                    />
+                    <span class="field-help">从电脑选择图片即可；支持 JPG、PNG、WebP，建议单张不超过 10MB。</span>
+                    <el-collapse class="url-fallback">
+                      <el-collapse-item title="已有网络图片？粘贴地址" name="image-url">
+                        <el-input v-model="selectedContent.image" clearable placeholder="https://..." @input="markDirty" />
+                      </el-collapse-item>
+                    </el-collapse>
                   </el-form-item>
-                  <el-form-item v-if="mediaType === 'video'" label="视频地址">
-                    <el-input v-model="selectedContent.video" placeholder="粘贴 MP4 视频地址" @input="markDirty">
-                      <template #prefix><el-icon><VideoCamera /></el-icon></template>
-                    </el-input>
+                  <el-form-item v-if="mediaType === 'video'" label="视频文件">
+                    <file-upload
+                      :model-value="managedUploadValue(selectedContent.video)"
+                      :limit="1"
+                      :file-size="10"
+                      :file-type="['mp4', 'webm', 'mov', 'm4v']"
+                      @update:model-value="value => updateSelectedContent('video', value)"
+                    />
+                    <span class="field-help">可直接上传 10MB 内的短视频；较大视频可在下方粘贴已有链接。</span>
+                    <el-collapse class="url-fallback">
+                      <el-collapse-item title="已有网络视频？粘贴地址" name="video-url">
+                        <el-input v-model="selectedContent.video" clearable placeholder="https://.../video.mp4" @input="markDirty" />
+                      </el-collapse-item>
+                    </el-collapse>
                     <div class="inline-options">
                       <el-checkbox v-model="selectedContent.auto" @change="markDirty">自动播放</el-checkbox>
                       <el-checkbox v-model="selectedContent.loop" @change="markDirty">循环播放</el-checkbox>
@@ -188,7 +207,20 @@
                   <div v-for="(item, index) in selectedModule.content" :key="index" class="nav-item-editor">
                     <div class="nav-item-title"><strong>入口 {{ index + 1 }}</strong><el-button link type="danger" icon="Delete" @click="removeNavItem(index)" /></div>
                     <el-form-item label="显示名称"><el-input v-model="item.title" placeholder="例如：定制案例" @input="markDirty" /></el-form-item>
-                    <el-form-item label="图标地址"><el-input v-model="item.icon" placeholder="粘贴图标地址" @input="markDirty" /></el-form-item>
+                    <el-form-item label="导航图标">
+                      <image-upload
+                        :model-value="item.icon"
+                        :limit="1"
+                        :file-size="5"
+                        :file-type="['png', 'jpg', 'jpeg', 'webp']"
+                        @update:model-value="value => updateNavIcon(item, value)"
+                      />
+                      <el-collapse class="url-fallback">
+                        <el-collapse-item title="已有网络图标？粘贴地址" :name="`nav-icon-${index}`">
+                          <el-input v-model="item.icon" clearable placeholder="https://..." @input="markDirty" />
+                        </el-collapse-item>
+                      </el-collapse>
+                    </el-form-item>
                     <el-form-item label="跳转到">
                       <el-select :model-value="linkedCategoryId(item)" clearable filterable placeholder="选择作品分类" @update:model-value="value => setNavCategory(item, value)">
                         <el-option v-for="category in categories" :key="category.categoryId" :label="category.categoryName" :value="category.categoryId" />
@@ -477,6 +509,20 @@ function removeNavItem(index) {
   markDirty()
 }
 
+function updateSelectedContent(field, value) {
+  selectedContent.value[field] = value || ''
+  markDirty()
+}
+
+function updateNavIcon(item, value) {
+  item.icon = value || ''
+  markDirty()
+}
+
+function managedUploadValue(value) {
+  return /^https?:\/\//i.test(value || '') ? '' : (value || '')
+}
+
 function markDirty() { dirty.value = true }
 
 function previewUrl(page) {
@@ -589,7 +635,10 @@ Promise.all([load(), loadCategories()])
 .inspector-scroll { height: calc(100vh - 340px); min-height: 440px; }
 .inspector-form { padding: 20px 5px 20px 0; }
 .field-help { display: block; margin-top: 7px; color: var(--studio-muted); font-size: 12px; line-height: 1.55; }
-.image-preview { width: 100%; height: 150px; margin-top: 10px; border-radius: 8px; }
+.url-fallback { width: 100%; margin-top: 10px; border-top: 0; border-bottom: 0; }
+.url-fallback :deep(.el-collapse-item__header) { height: 34px; color: #777269; background: transparent; font-size: 12px; }
+.url-fallback :deep(.el-collapse-item__wrap) { background: transparent; }
+.url-fallback :deep(.el-collapse-item__content) { padding-bottom: 8px; }
 .inline-options { display: flex; gap: 20px; margin-top: 8px; }
 .nav-editor-heading, .nav-item-title { display: flex; align-items: center; justify-content: space-between; }
 .nav-editor-heading { margin-bottom: 10px; font-size: 14px; font-weight: 600; }
