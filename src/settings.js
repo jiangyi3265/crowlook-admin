@@ -2,7 +2,7 @@ export default {
   /**
    * 网页标题
    */
-  title: import.meta.env.VITE_APP_TITLE,
+  title: 'Crowlook 内容管理',
 
   /**
    * 侧边栏主题 深色主题theme-dark，浅色主题theme-light
@@ -12,7 +12,7 @@ export default {
   /**
    * 是否系统布局配置
    */
-  showSettings: true,
+  showSettings: false,
 
   /**
    * 菜单导航模式 1、纯左侧 2、混合（左侧+顶部） 3、纯顶部
@@ -52,6 +52,6 @@ export default {
   /**
    * 底部版权文本内容
    */
-  footerContent: 'Copyright © 2018-2026 RuoYi. All Rights Reserved.'
+  footerContent: 'Crowlook 内容管理 · 客户专用运营后台'
 }
 

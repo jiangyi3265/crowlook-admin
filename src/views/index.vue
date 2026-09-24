@@ -72,8 +72,8 @@ const metrics = computed(() => [
 const workflow = [
   { title: '整理分类', description: '维护用户端栏目名称、层级与顺序。', path: '/crowlook/category' },
   { title: '编辑作品', description: '录入封面、正文与展示方式，并明确发布状态。', path: '/crowlook/post' },
-  { title: '编排页面', description: '维护首页、发现页和品牌页的 JSON 模块。', path: '/crowlook/page' },
-  { title: '审核评论', description: '处理用户端提交内容，审核通过后公开展示。', path: '/crowlook/comment' }
+  { title: '装修页面', description: '拖动调整首页、作品页和品牌页的内容模块。', path: '/crowlook/page' },
+  { title: '审核评论', description: '通过或拒绝用户评论，通过后立即展示在用户端。', path: '/crowlook/comment' }
 ]
 
 function go(path) {
